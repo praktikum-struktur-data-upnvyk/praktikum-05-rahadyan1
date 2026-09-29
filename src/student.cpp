@@ -71,23 +71,69 @@ string display(Stack& s) {
 
 // SOAL 1
 bool push(Stack& s, int nilai) {
-    return false;
+   Node* newNode = new Node;
+    newNode->data = nilai;
+    newNode->next = s.top;
+    s.top = newNode;
+   return true;
 }
 
 // SOAL 2
 bool pop(Stack& s, int& nilai) {
-    return false;
-}
+        if (s.top == nullptr) {
+        return false;
+    }
 
+    Node* hapus = s.top;
+    nilai = s.top->data;
+    s.top = s.top->next;
+    delete hapus;
+
+    return true;
+}
 // SOAL 3
 void clear(Stack& s) {
+    Node* current = s.top;
+    s.top = nullptr;
+
+    while (current != nullptr) {
+        Node* next = current->next;
+        delete current;
+        current = next;
+    }
 }
 
 // SOAL 4
 bool kurungSeimbang(const string& ekspresi) {
-    return false;
-}
+    Stack s;
+    inisialisasi(s);
 
+    for (char c : ekspresi) {
+        if (c == '(' || c == '[' || c == '{') {
+            push(s, c);
+        }
+        else if (c == ')' || c == ']' || c == '}') {
+            int nilai;
+
+            if (!pop(s, nilai)) {
+                clear(s);
+                return false;
+            }
+
+            if ((c == ')' && nilai != '(') ||
+                (c == ']' && nilai != '[') ||
+                (c == '}' && nilai != '{')) {
+                clear(s);
+                return false;
+            }
+        }
+    }
+
+    bool hasil = isEmpty(s);
+    clear(s);
+
+    return hasil;
+}
 // =============================================================================
 // MAIN() — memeragakan sesi mengetik. TIDAK dinilai, bebas diubah.
 // =============================================================================
